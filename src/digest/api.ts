@@ -1,7 +1,12 @@
 import { Hono } from 'hono';
 import type { RigConfig } from '../config.js';
+import { readNight } from './reader.js';
 
-/** Route boundary shared before the independent section-2 workers start. */
-export function createDigestApi(_config: RigConfig) {
-  return new Hono();
+/** JSON API for the shared nightly digest. */
+export function createDigestApi(config: RigConfig) {
+  return new Hono().get('/:night', (c) => {
+    const digest = readNight(config.runsDir, c.req.param('night'));
+    if (digest === null) return c.json({ error: 'night not found' }, 404);
+    return c.json(digest);
+  });
 }
