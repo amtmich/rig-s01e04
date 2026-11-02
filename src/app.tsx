@@ -1,4 +1,6 @@
 import { Hono } from 'hono';
+import { createDigestPage } from './digest/page.js';
+import { createDigestApi } from './digest/api.js';
 import { loadConfig, type RigConfig } from './config.js';
 import { lane } from './lane.js';
 import { readStatus } from './status.js';
@@ -17,6 +19,9 @@ export function createApp(config: RigConfig = loadConfig()) {
       </Layout>,
     ),
   );
+
+  app.route('/digest', createDigestPage(config));
+  app.route('/api/digest', createDigestApi(config));
 
   return app;
 }
