@@ -51,8 +51,9 @@ describe('digest routes', () => {
     expect(html).toContain('—');
     expect(html).not.toContain('<script>bad()</script>');
     expect(html).toContain('&lt;script&gt;bad()&lt;/script&gt;');
-    expect(digest.rows[0].firstTime).toBe('2026-10-28T22:00:00-04:00');
-    expect(digest.rows[0].lastTime).toBe('2026-10-28T23:02:00+01:00');
+    // Compare actual instants across offsets while preserving the source strings.
+    expect(digest.rows[0].firstTime).toBe('2026-10-28T23:01:00+01:00');
+    expect(digest.rows[0].lastTime).toBe('2026-10-28T22:00:00-04:00');
   });
 
   it('returns 404 for a night file that does not exist', async () => {
